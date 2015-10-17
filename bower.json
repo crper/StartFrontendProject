@@ -1,0 +1,27 @@
+{
+  "name": "StartFrontendProject",
+  "version": "0.0.0",
+  "homepage": "https://github.com/crperlin/StartFrontendProject",
+  "authors": [
+    "crperlin <crper@outlook.com>"
+  ],
+  "description": "This project library",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "./bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5",
+    "html5-boilerplate": "~5.2.0",
+    "Chart.js": "chartjs#~1.0.2"
+  }
+}
