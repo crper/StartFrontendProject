@@ -12,7 +12,6 @@
 // gulp-load-plugins : Automatically load Gulp plugins
 // gulp-minify-css   : Minify CSS
 // gulp-minify-html  : Minify html with minimize.
-// gulp-htmlmin      : gulp plugin to minify HTML.
 // gulp-filter       : Filter files in a vinyl stream
 // gulp-rename       : Rename files
 // gulp-sass         : Compile Sass
@@ -20,6 +19,8 @@
 // gulp-imagemin     : Minify PNG, JPEG, GIF and SVG images
 // gulp-uglify       : Minify JavaScript with UglifyJS
 // gulp-util         : Utility functions
+// gulp-ignore       : Include or exclude gulp files from the stream based on a condition
+// gulp-inject       : A javascript, stylesheet and webcomponent injection plugin for Gulp, i.e. inject file references into your index.html
 // gulp-notify       : gulp plugin to send messages based on Vinyl Files or Errors to Mac OS X, Linux or Windows using the node-notifier module. Fallbacks to Growl or simply logging
 // gulp-watch        : Watch stream
 // gulp-plumber      : Prevent pipe breaking caused by errors from gulp plugins
@@ -72,6 +73,10 @@ gulp.task('sass', function () {
             browsers: ['last 2 versions'],
             cascade: false
         }))
+        .pipe(pin.size({
+            showFiles: true,
+            pretty: true
+        }))
         .pipe(gulp.dest(cssSourceDir))
         .pipe(pin.gmc({
             compatibility: 'ie8'
@@ -79,6 +84,7 @@ gulp.task('sass', function () {
         .pipe(pin.rename({
             suffix: ".min"
         }))
+        .pipe(pin.size())
         .pipe(gulp.dest(cssDistDir))
         .pipe(reload({
             stream: true
@@ -111,6 +117,10 @@ gulp.task('minifyCSS', function () {
             browsers: ['last 2 versions'],
             cascade: false
         }))
+        .pipe(pin.size({
+            showFiles: true,
+            pretty: true
+        }))
         .pipe(gulp.dest(cssSourceDir))
         .pipe(pin.gmc({
             compatibility: 'ie8'
@@ -118,12 +128,20 @@ gulp.task('minifyCSS', function () {
         .pipe(pin.rename({
             suffix: ".min"
         }))
+        .pipe(pin.size({
+            showFiles: true,
+            pretty: true
+        }))
         .pipe(gulp.dest(cssDistDir))
 })
 
 //压缩HTML(minify html)
 gulp.task('minifyHTML', function () {
     return gulp.src(distDir + 'index.html')
+        .pipe(pin.size({
+            showFiles: true,
+            pretty: true
+        }))
         .pipe(pin.gmh({
             conditionals: true,
             spare: true
@@ -131,7 +149,12 @@ gulp.task('minifyHTML', function () {
         .pipe(pin.rename({
             suffix: ".min"
         }))
+        .pipe(pin.size({
+            showFiles: true,
+            pretty: true
+        }))
         .pipe(gulp.dest(distDir))
+
 })
 
 //压缩图片(minify photo)
@@ -144,12 +167,18 @@ gulp.task('minifyImg', function () {
 // 合并，压缩文件(concat file and minify)
 gulp.task('minifyJS', function () {
     return gulp.src(jsSourceDir + '**/*.js')
-        .pipe(pin.sourcemaps.init())
         .pipe(pin.concat('all/all.js'))
+        .pipe(pin.size({
+            showFiles: true,
+            pretty: true
+        }))
         .pipe(gulp.dest(jsSourceDir))
         .pipe(pin.uglify())
         .pipe(pin.rename('all.min.js'))
-        .pipe(pin.sourcemaps.write('./maps'))
+        .pipe(pin.size({
+            showFiles: true,
+            pretty: true
+        }))
         .pipe(gulp.dest(jsDistDir))
 })
 
