@@ -22,6 +22,9 @@
     "jquery": "~2.1.4",
     "bootstrap": "~3.3.5",
     "html5-boilerplate": "~5.2.0",
-    "Chart.js": "chartjs#~1.0.2"
+    "Chart.js": "chartjs#~1.0.2",
+    "font-awesome": "~4.4.0",
+    "fullpage.js": "fullpage#~2.7.4",
+    "clipboard.js": "~0.1.1"
   }
 }
