@@ -31,9 +31,9 @@
 //导入插件模块(import module)
 var gulp = require('gulp'),
     gulpLoadPlugins = require('gulp-load-plugins'),
-    browserSync = require('browser-sync')
+    bs = require('browser-sync')
     .create(),
-    reload = browserSync.reload,
+    reload = bs.reload,
     pin = gulpLoadPlugins({ //plugins rename pin
         /*gulp-load-plugins options*/
         rename: {
@@ -41,7 +41,6 @@ var gulp = require('gulp'),
             'gulp-minify-html': 'gmh',
             'gulp-minify-css': 'gmc',
             'gulp-rimraf': 'clean',
-            'gulp-sourcemaps': 'smap',
         } //a mapping of plugins to rename
     });
 
@@ -89,16 +88,16 @@ gulp.task('sass', function () {
 
 // 静态服务器 + 监听 scss/html 文件(static server + listen scss file on change)
 gulp.task('serve', ['sass'], function () {
-
-    browserSync.init({
-        server: "distDir"
+    var files = [distDir + '**/*.html']
+    bs.init(files, {
+        server: distDir
     }); //静态服务器启动的目录(server start directory)
-
     gulp.watch(scssSourceDir + "*.scss", ['sass']);
-    gulp.watch(distDir+'*.html')
-        .on('change', reload);
 });
 
+
+gulp.watch(['*.html', cssSourceDir + '*.css'], ['minifyCSS'])
+    .on('change', reload);
 
 
 //压缩css(minify css)
@@ -124,7 +123,7 @@ gulp.task('minifyCSS', function () {
 
 //压缩HTML(minify html)
 gulp.task('minifyHTML', function () {
-    return gulp.src(distDir + '*.html')
+    return gulp.src(distDir + 'index.html')
         .pipe(pin.gmh({
             conditionals: true,
             spare: true
@@ -145,10 +144,12 @@ gulp.task('minifyImg', function () {
 // 合并，压缩文件(concat file and minify)
 gulp.task('minifyJS', function () {
     return gulp.src(jsSourceDir + '**/*.js')
+        .pipe(pin.sourcemaps.init())
         .pipe(pin.concat('all/all.js'))
         .pipe(gulp.dest(jsSourceDir))
         .pipe(pin.uglify())
         .pipe(pin.rename('all.min.js'))
+        .pipe(pin.sourcemaps.write('./maps'))
         .pipe(gulp.dest(jsDistDir))
 })
 

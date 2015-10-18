@@ -1,0 +1,5 @@
+$width:500px;
+
+body {
+  #{$width}:$width;
+}
