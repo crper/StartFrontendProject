@@ -27,6 +27,12 @@
 // gulp-rimraf       : rimraf plugin for gulp
 // gulp-size         : Display the size of your project
 // gulp-ruby-sass    : Compile Sass to CSS with Ruby Sass
+// gulp-react        : Precompile Facebook React JSX templates into JavaScript
+// gulp-webpack      : webpack plugin for gulp
+// gulp-webpack      : webpack plugin for gulp
+// webpack-stream    : Run webpack as a stream to conveniently integrate with gulp.
+// gulp-csscomb      : CSScomb is a coding style formatter for CSS.
+// gulp-concat-css   : Concatenate css files, rebasing urls and inlining @import
 // -------------------------------------
 
 //导入插件模块(import module)
@@ -99,12 +105,11 @@ gulp.task('serve', ['sass'], function () {
     bs.init(files, {
         server: serveRootDir
     }); //静态服务器启动的目录(server start directory)
-    gulp.watch(scssSourceDir + "*.scss", ['sass']);
+
 });
 
 
-gulp.watch(['*.html', cssSourceDir + '*.css'], ['minifyCSS'])
-    .on('change', reload);
+
 
 
 
@@ -117,12 +122,15 @@ gulp.task('minifyCSS', function () {
         }))
         .pipe(pin.autoprefixer({
             browsers: ['last 2 versions'],
-            cascade: false
+            cascade: false,
+            remove:true
         }))
+        .pipe(pin.csscomb())
         .pipe(pin.size({
             showFiles: true,
             pretty: true
         }))
+        .pipe(pin.concat('all/all.css'))
         .pipe(gulp.dest(cssSourceDir))
         .pipe(pin.gmc({
             compatibility: 'ie8'
@@ -188,4 +196,12 @@ gulp.task('minifyJS', function () {
 gulp.task('default', ['serve'], function () {
     gulp.start('sass', 'minifyJS', 'minifyCSS', 'minifyHTML',
         'minifyImg')
+})
+
+
+//监听任务汇总
+gulp.task('watch',function(){
+    gulp.watch(scssSourceDir + "*.scss", ['sass']);
+    gulp.watch(['*.html', cssSourceDir + '*.css'], ['minifyCSS'])
+    .on('change', reload);
 })

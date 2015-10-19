@@ -9,3 +9,8 @@
   - 监听生产目录的css及发布目录下的html,刷新浏览器
   - 计算文件大小
   - 添加了gulp-ignore / gulp-inject
+- 2015/10/20
+  - 完善监听机制
+  - 添加css合并
+  - 增加了CSS自动排版及添加前缀功能
+  - 增加了一些备用模块(gulp-react /gulp-webpack/gulp-webpack-stream)
