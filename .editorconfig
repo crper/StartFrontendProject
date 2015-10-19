@@ -8,8 +8,13 @@ root = true
 [*]
 [*.{js,scss}]
 charset = utf-8
+insert_final_newline = true
 
 # change these settings to your own preference
+indent_style = space
+indent_size = 2
+
+[package.json]
 indent_style = space
 indent_size = 2
 

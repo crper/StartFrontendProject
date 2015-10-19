@@ -29,10 +29,10 @@
 // gulp-ruby-sass    : Compile Sass to CSS with Ruby Sass
 // gulp-react        : Precompile Facebook React JSX templates into JavaScript
 // gulp-webpack      : webpack plugin for gulp
-// gulp-webpack      : webpack plugin for gulp
 // webpack-stream    : Run webpack as a stream to conveniently integrate with gulp.
 // gulp-csscomb      : CSScomb is a coding style formatter for CSS.
 // gulp-concat-css   : Concatenate css files, rebasing urls and inlining @import
+// yo                : CLI tool for running Yeoman generators
 // -------------------------------------
 
 //导入插件模块(import module)
@@ -49,21 +49,23 @@ var gulp = require('gulp'),
             'gulp-minify-css': 'gmc',
             'gulp-rimraf': 'clean',
         } //a mapping of plugins to rename
-    });
+    }),
+    pngquant = require('imagemin-pngquant'),
+    imageminJpegtran = require('imagemin-jpegtran');
 
 
 //目录路径(Directory Path)
-var sourceDir = './webstart/build/',
+var sourceDir = 'webstart/build/',
     imgSourceDir = sourceDir + 'img/',
     jsSourceDir = sourceDir + 'js/',
     cssSourceDir = sourceDir + 'css/',
     lessSourceDir = sourceDir + 'less/',
     scssSourceDir = sourceDir + 'scss/';
-var distDir = './webstart/dist/',
+var distDir = 'webstart/dist/',
     imgDistDir = distDir + 'img/',
     jsDistDir = distDir + 'js/',
     cssDistDir = distDir + 'css/',
-    serveRootDir = './webstart/';
+    serveRootDir = 'webstart/';
 
 
 // scss编译后的css将注入到浏览器里实现更新(scss compile and reload)
@@ -110,9 +112,6 @@ gulp.task('serve', ['sass'], function () {
 
 
 
-
-
-
 //压缩css(minify css)
 gulp.task('minifyCSS', function () {
     gulp.src(cssSourceDir + '*.css')
@@ -123,7 +122,7 @@ gulp.task('minifyCSS', function () {
         .pipe(pin.autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false,
-            remove:true
+            remove: true
         }))
         .pipe(pin.csscomb())
         .pipe(pin.size({
@@ -170,7 +169,21 @@ gulp.task('minifyHTML', function () {
 //压缩图片(minify photo)
 gulp.task('minifyImg', function () {
     return gulp.src(imgSourceDir + '*')
-        .pipe(pin.imagemin())
+        .pipe(pin.plumber({
+            errorHandler: pin.notify.onError(
+                'Error: <%= error.message %>')
+        }))
+        .pipe(pin.imagemin({
+            progressive: true,
+            svgoPlugins: [{
+                removeViewBox: false
+            }],
+            use: [pngquant()]
+        }))
+        .pipe(pin.size({
+            showFiles: true,
+            pretty: true
+        }))
         .pipe(gulp.dest(imgDistDir));
 })
 
@@ -200,8 +213,8 @@ gulp.task('default', ['serve'], function () {
 
 
 //监听任务汇总
-gulp.task('watch',function(){
+gulp.task('watch', function () {
     gulp.watch(scssSourceDir + "*.scss", ['sass']);
     gulp.watch(['*.html', cssSourceDir + '*.css'], ['minifyCSS'])
-    .on('change', reload);
+        .on('change', reload);
 })

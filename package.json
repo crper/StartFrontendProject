@@ -46,6 +46,11 @@
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.3.5",
     "gulp-webpack": "^1.5.0",
+    "imagemin-jpegtran": "^4.3.1",
+    "imagemin-optipng": "^4.3.0",
+    "imagemin-pngquant": "^4.2.0",
+    "is-jpg": "^1.0.0",
+    "jpegtran-bin": "^3.0.5",
     "node-sass": "^3.3.3",
     "webpack-stream": "^2.1.1",
     "yo": "^1.4.8"
