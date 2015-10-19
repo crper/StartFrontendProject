@@ -25,6 +25,7 @@
     "Chart.js": "chartjs#~1.0.2",
     "font-awesome": "~4.4.0",
     "fullpage.js": "fullpage#~2.7.4",
-    "clipboard.js": "~0.1.1"
+    "clipboard.js": "~0.1.1",
+    "jquery-pjax": "~1.9.6"
   }
 }

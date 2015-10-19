@@ -1,5 +1,10 @@
 $width:500px;
 
 body {
-  #{$width}:$width;
+  width:$width;
+  background-color:#ff0;
+}
+
+p{
+  font-size:50px;
 }

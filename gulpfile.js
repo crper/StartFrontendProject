@@ -56,7 +56,8 @@ var sourceDir = './webstart/build/',
 var distDir = './webstart/dist/',
     imgDistDir = distDir + 'img/',
     jsDistDir = distDir + 'js/',
-    cssDistDir = distDir + 'css/';
+    cssDistDir = distDir + 'css/',
+    serveRootDir = './webstart/';
 
 
 // scss编译后的css将注入到浏览器里实现更新(scss compile and reload)
@@ -96,7 +97,7 @@ gulp.task('sass', function () {
 gulp.task('serve', ['sass'], function () {
     var files = [distDir + '**/*.html']
     bs.init(files, {
-        server: distDir
+        server: serveRootDir
     }); //静态服务器启动的目录(server start directory)
     gulp.watch(scssSourceDir + "*.scss", ['sass']);
 });
@@ -104,6 +105,7 @@ gulp.task('serve', ['sass'], function () {
 
 gulp.watch(['*.html', cssSourceDir + '*.css'], ['minifyCSS'])
     .on('change', reload);
+
 
 
 //压缩css(minify css)

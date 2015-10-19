@@ -1,2 +1,6 @@
 body {
-  500px: 500px; }
+  width: 500px;
+  background-color: #ff0; }
+
+p {
+  font-size: 50px; }
