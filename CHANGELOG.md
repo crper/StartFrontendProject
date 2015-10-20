@@ -15,3 +15,4 @@
   - 增加了CSS自动排版及添加前缀功能
   - 增加了一些备用模块(gulp-react /gulp-webpack/gulp-webpack-stream)
   - 完善压缩图形
+  - js检测功能
