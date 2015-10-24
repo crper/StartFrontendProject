@@ -135,6 +135,10 @@ gulp.task('minifyCSS', function () {
         .pipe($.gmc({
             compatibility: 'ie8'
         }))
+        .pipe($.plumber({
+            errorHandler: $.notify.onError(
+                'Error: <%= error.message %>')
+        }))
         .pipe($.rename({
             suffix: ".min"
         }))
@@ -188,8 +192,8 @@ gulp.task('minifyImg', function () {
         .pipe(gulp.dest(imgDistDir));
 })
 
-// 合并，压缩文件(concat file and minify)
-gulp.task('minifyJS', function () {
+// 合并，压缩文件(concat file and minify),启用检测JS自行增加['eslint']
+gulp.task('minifyJS',function () {
     return gulp.src(jsSourceDir + '**/*.js')
         .pipe($.concat('all/all.js'))
         .pipe($.size({
@@ -198,6 +202,8 @@ gulp.task('minifyJS', function () {
         }))
         .pipe(gulp.dest(jsSourceDir))
         .pipe($.uglify())
+        // .pipe($.eslint())
+    		// .pipe($.eslint.format())
         .pipe($.rename('all.min.js'))
         .pipe($.size({
             showFiles: true,
@@ -205,6 +211,14 @@ gulp.task('minifyJS', function () {
         }))
         .pipe(gulp.dest(jsDistDir))
 })
+
+
+//eslint
+// gulp.task('eslint', function() {
+// 	return gulp.src([''])
+// 		.pipe($.eslint())
+// 		.pipe($.eslint.format())
+// });
 
 // 默认任务(default task)
 gulp.task('default', ['serve'], function () {
