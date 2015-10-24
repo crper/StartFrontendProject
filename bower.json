@@ -26,6 +26,9 @@
     "font-awesome": "~4.4.0",
     "fullpage.js": "fullpage#~2.7.4",
     "clipboard.js": "~0.1.1",
-    "jquery-pjax": "~1.9.6"
+    "jquery-pjax": "~1.9.6",
+    "foundation": "~5.5.3",
+    "admin-lte":"~2.3.2",
+    "semantic": "semantic-ui#~2.1.4"
   }
 }

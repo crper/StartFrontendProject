@@ -210,11 +210,6 @@ gulp.task('minifyJS', function () {
 gulp.task('default', ['serve'], function () {
     gulp.start('sass', 'minifyJS', 'minifyCSS', 'minifyHTML',
         'minifyImg')
-})
-
-
-//监听任务汇总
-gulp.task('watch', function () {
     gulp.watch(scssSourceDir + "*.scss", ['sass']);
     gulp.watch(['*.html', cssSourceDir + '*.css'], ['minifyCSS'])
         .on('change', reload) //检测到html和css有变动重新加载浏览器页面
