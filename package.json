@@ -55,5 +55,8 @@
     "node-sass": "^3.3.3",
     "webpack-stream": "^2.1.1",
     "yo": "^1.4.8"
+  },
+  "dependencies": {
+    "gulp-css-scss": "0.0.2"
   }
 }

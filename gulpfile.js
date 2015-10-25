@@ -33,6 +33,7 @@
 // gulp-csscomb      : CSScomb is a coding style formatter for CSS.
 // gulp-concat-css   : Concatenate css files, rebasing urls and inlining @import
 // yo                : CLI tool for running Yeoman generators
+// gulp-css-scss     : Gulp plugin for converting CSS to Scss.
 // -------------------------------------
 
 //导入插件模块(import module)
@@ -48,7 +49,7 @@ var gulp = require('gulp'),
             'gulp-minify-html': 'gmh',
             'gulp-minify-css': 'gmc',
             'gulp-rimraf': 'clean',
-            'browser-sync': 'bs'
+            'gulp-css-scss': 'c2s'
         } //a mapping of plugins to rename
     }),
     pngquant = require('imagemin-pngquant'),
@@ -61,7 +62,9 @@ var sourceDir = 'webstart/build/',
     jsSourceDir = sourceDir + 'js/',
     cssSourceDir = sourceDir + 'css/',
     lessSourceDir = sourceDir + 'less/',
-    scssSourceDir = sourceDir + 'scss/';
+    scssSourceDir = sourceDir + 'scss/',
+    coverScssSourceDir = sourceDir + 'covertSource/covert2scss/', //放进需要反编译的CSS文件
+    coverLcssSourceDir = sourceDir + 'covertSource/covert2less/'; //放进需要反编译的CSS文件
 var distDir = 'webstart/dist/',
     imgDistDir = distDir + 'img/',
     jsDistDir = distDir + 'js/',
@@ -193,7 +196,7 @@ gulp.task('minifyImg', function () {
 })
 
 // 合并，压缩文件(concat file and minify),启用检测JS自行增加['eslint']
-gulp.task('minifyJS',function () {
+gulp.task('minifyJS', function () {
     return gulp.src(jsSourceDir + '**/*.js')
         .pipe($.concat('all/all.js'))
         .pipe($.size({
@@ -203,7 +206,7 @@ gulp.task('minifyJS',function () {
         .pipe(gulp.dest(jsSourceDir))
         .pipe($.uglify())
         // .pipe($.eslint())
-    		// .pipe($.eslint.format())
+        // .pipe($.eslint.format())
         .pipe($.rename('all.min.js'))
         .pipe($.size({
             showFiles: true,
@@ -219,6 +222,15 @@ gulp.task('minifyJS',function () {
 // 		.pipe($.eslint())
 // 		.pipe($.eslint.format())
 // });
+
+
+
+//CSS反编译成SASS文件 -- 可选任务
+gulp.task('css2scss', function () {
+    return gulp.src(coverScssSourceDir + '*.css')
+        .pipe($.c2s())
+        .pipe(gulp.dest(scssSourceDir));
+});
 
 // 默认任务(default task)
 gulp.task('default', ['serve'], function () {
