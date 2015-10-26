@@ -65,6 +65,7 @@ var sourceDir = 'webstart/build/',
     scssSourceDir = sourceDir + 'scss/',
     coverScssSourceDir = sourceDir + 'covertSource/covert2scss/', //放进需要反编译的CSS文件
     coverLcssSourceDir = sourceDir + 'covertSource/covert2less/'; //放进需要反编译的CSS文件
+    coverEs6SourceDir = sourceDir + 'covertSource/covert2es6/'; //放进需要反编译的es6写法的JS文件
 var distDir = 'webstart/dist/',
     imgDistDir = distDir + 'img/',
     jsDistDir = distDir + 'js/',
@@ -230,6 +231,17 @@ gulp.task('css2scss', function () {
     return gulp.src(coverScssSourceDir + '*.css')
         .pipe($.c2s())
         .pipe(gulp.dest(scssSourceDir));
+});
+
+//ESL6写法的JS文件转化为ES5写法JS文件
+gulp.task('es2js', function () {
+    return gulp.src(coverEs6SourceDir+'*/**.js')
+        .pipe($.plumber({
+            errorHandler: $.notify.onError(
+                'Error: <%= error.message %>')
+        }))
+        .pipe($.babel())
+        .pipe(gulp.dest(jsSourceDir));
 });
 
 // 默认任务(default task)
