@@ -12,6 +12,7 @@
 
 ##特征
 - 编译SASS/SCSS -> CSS
+- CSS 逆转换为 less / scss
 - 压缩JS/HTML/CSS/图片
 - 合并文件
 - JS语法检测
@@ -20,10 +21,22 @@
 - 清除文件
 
 
+
 ##目录结构及文件
 - webstart
  - --build -- 开发目录
+   - covertSource -- 待转换文件存放目录
+     - covert2es6 -- es6文件存放处
+     - covert2less -- less文件夹存放处
+     - covert2scss -- scss文件夹存放处
+   - css -- 开发目录下css文件存放处
+   - img -- 开发目录下图片文件存放处(会调用图片压缩)
+   - js -- 开发目录下js文件存放处  
  - --dist -- 发布目录
+   - fonts -- 引用字体存放处
+   - css -- 发布目录下css文件存放处
+   - img -- 发布目录下图片文件存放处(会调用图片压缩)
+   - js -- 发布目录下js文件存放处
 - bower_components -- bower安装的库存放路径(这个路径可以在.bowerrc修改)
 - node_modules -- node安装的存放目录
 - gulpfile.js -- gulp配置文件
@@ -35,35 +48,3 @@
 - .editorconfig -- 项目基本配置
 
 ------------
-
-# English
-
-The most basic configuration, no modular loading (webpack,Browserify,requrejs,seajs ==),
-On the basis of its own development
-## on Environment
-- v4.x node
-- 2.7.x Python
-(2.x browser-sync window Python)
-
-## features
-Compile SASS/SCSS - > CSS
-- compressed JS/HTML/CSS/ image
-- merge file
-- JS syntax checking
-- add the suffix name
-- browser preview update
-- clear file
-
-## directory structure and file
-- webstart
-- --build - Development Directory
-- --dist - publish directory
-- Bower_components -- bower installed inventory discharge path (this path can .bowerrc modified)
-- node_modules -- node install library save Directory;
-- gulpfile.js - gulp configuration file
-- package.json - node configuration file (in the directory, the project started update` `npm)
-- bower.json -- library manager
-- .Gitignore - GitHub submission ignored
-- .Bowerrc - to change the environment file for the default installation path for bower
-- .Changelog - log records for project file changes
-- .Editorconfig - the basic configuration of the project
