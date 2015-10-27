@@ -2,3 +2,4 @@
 *
 # 除了这个文件
 !.gitignore
+!.demo.min.css

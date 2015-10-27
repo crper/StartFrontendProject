@@ -249,10 +249,7 @@ gulp.task('default', ['serve'], function () {
     gulp.start('sass', 'minifyJS', 'minifyCSS', 'minifyHTML',
         'minifyImg')
     gulp.watch(scssSourceDir + "*.scss", ['sass']);
-    gulp.watch(['*.html', cssSourceDir + '*.css'], ['minifyCSS'])
+    gulp.watch(['*.html', cssSourceDir + '*.css',scssSourceDir+'*.scss'], ['minifyCSS'])
         .on('change', reload) //检测到html和css有变动重新加载浏览器页面
-        .on('change', function (event) {
-            console.log('Event type: ' + event.type);
-            console.log('Event path: ' + event.path);
-        })
+
 })
