@@ -71,3 +71,18 @@ footer > cite > a {
   .section3 > p {
     word-break: normal;
     color: #fb1700; }
+
+.puma-icon, .sea-slug-icon, .egret-icon, .salamander-icon {
+  background: url("/images/animal.png") no-repeat; }
+
+.puma-icon {
+  background-position: -30px; }
+
+.sea-slug-icon {
+  background-position: -60px; }
+
+.egret-icon {
+  background-position: -90px; }
+
+.salamander-icon {
+  background-position: -120px; }
