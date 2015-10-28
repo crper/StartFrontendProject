@@ -23,28 +23,43 @@
 
 
 ##目录结构及文件
-- webstart
- - --build -- 开发目录
-   - covertSource -- 待转换文件存放目录
-     - covert2es6 -- es6文件存放处
-     - covert2less -- less文件夹存放处
-     - covert2scss -- scss文件夹存放处
-   - css -- 开发目录下css文件存放处
-   - img -- 开发目录下图片文件存放处(会调用图片压缩)
-   - js -- 开发目录下js文件存放处  
- - --dist -- 发布目录
-   - fonts -- 引用字体存放处
-   - css -- 发布目录下css文件存放处
-   - img -- 发布目录下图片文件存放处(会调用图片压缩)
-   - js -- 发布目录下js文件存放处
-- bower_components -- bower安装的库存放路径(这个路径可以在.bowerrc修改)
-- node_modules -- node安装的存放目录
-- gulpfile.js -- gulp配置文件
-- package.json -- node配置文件(在该目录下,项目开始`npm update`)
-- bower.json -- 库管理器
-- .gitignore -- github提交忽略
-- .bowerrc -- 更改bower默认安装路径的环境文件
-- .changelog -- 项目文件修改的日志记录
-- .editorconfig -- 项目基本配置
+<pre>
+└─webstart
+    │  .bowerrc -- 更改bower默认安装路径的环境文件
+    │  .editorconfig -- 项目规范全局配置
+    │  .eslintrc -- JS语法检测配置
+    │  .gitignore -- github提交忽略
+    │  bower.json -- bower配置文件
+    │  CHANGELOG.md -- 项目文件修改的日志记录
+    │  gulpfile.js -- gulp配置文件
+    │  index.html
+    │  LICENSE -- 项目协议
+    │  package.json -- node配置文件(在该目录下,项目开始`npm install`)
+    │  README.md
+    │  bower_components -- bower安装的库存放路径(这个路径可以在.bowerrc修改)
+    │  node_modules -- node安装的存放目录
+    ├─build -- 开发目录
+    │  ├─covertSource
+    │  │  ├─covert2es6  -- es6待转换存放目录
+    │  │  ├─covert2less -- less待转换存放目录
+    │  │  └─covert2scss -- scss待转换存放目录
+    │  ├─css
+    │  │  └─all -- css合并文件存放目录(开发)
+    │  ├─img
+    │  ├─js
+    │  │  └─all -- js合并文件存放目录(开发)
+    │  ├─less
+    │  └─scss
+    │          
+    │          
+    │          
+    └─dist -- 发布目录
+        ├─css
+        │  └─all
+        ├─fonts
+        ├─img
+        └─js
+</pre>
+
 
 ------------

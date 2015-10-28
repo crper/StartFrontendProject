@@ -2,8 +2,7 @@
 /*经典的clearfix*/
 .clearfix {
   *zoom: 1; }
-  .clearfix::before,
-  .clearfix::after {
+  .clearfix::before, .clearfix::after {
     content: "";
     display: table; }
   .clearfix::after {
@@ -13,10 +12,8 @@
 /*超链接默认设置*/
 a {
   text-decoration: none; }
-  a:link,
-  a:visited,
-  a:hover,
-  a:active {
+  a:link, a:visited, a:hover, Syntax Highlighting for Sass
+a:active {
     color: #f5f5f5; }
   a:hover {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); }
