@@ -34,6 +34,7 @@
 // gulp-concat-css   : Concatenate css files, rebasing urls and inlining @import
 // yo                : CLI tool for running Yeoman generators
 // gulp-css-scss     : Gulp plugin for converting CSS to Scss.
+// sprity            : Generates sprites and proper style files out of a directory of images.
 // -------------------------------------
 
 //导入插件模块(import module)
@@ -53,7 +54,8 @@ var gulp = require('gulp'),
         } //a mapping of plugins to rename
     }),
     pngquant = require('imagemin-pngquant'),
-    imageminJpegtran = require('imagemin-jpegtran');
+    imageminJpegtran = require('imagemin-jpegtran'),
+    sprity = require('sprity');
 
 
 //目录路径(Directory Path)
@@ -64,8 +66,9 @@ var sourceDir = 'webstart/build/',
     lessSourceDir = sourceDir + 'less/',
     scssSourceDir = sourceDir + 'scss/',
     coverScssSourceDir = sourceDir + 'covertSource/covert2scss/', //放进需要反编译的CSS文件
-    coverLcssSourceDir = sourceDir + 'covertSource/covert2less/'; //放进需要反编译的CSS文件
-    coverEs6SourceDir = sourceDir + 'covertSource/covert2es6/'; //放进需要反编译的es6写法的JS文件
+    coverLcssSourceDir = sourceDir + 'covertSource/covert2less/', //放进需要反编译的CSS文件
+    coverEs6SourceDir = sourceDir + 'covertSource/covert2es6/', //放进需要反编译的es6写法的JS文件
+    iconSource = sourceDir + 'combinePhoto/';
 var distDir = 'webstart/dist/',
     imgDistDir = distDir + 'img/',
     jsDistDir = distDir + 'js/',
@@ -113,6 +116,30 @@ gulp.task('serve', ['sass'], function () {
         server: serveRootDir
     }); //静态服务器启动的目录(server start directory)
 
+
+  // 提供一个回调来捕获所有事件的CSS
+  // files - 然后筛选的'change'和重载所有
+  // css文件在页面上
+  bs.watch([serveRootDir+"*.html"], function (event, file) {
+    if (event === "change") {
+      reload("*.html");
+    }
+  });
+  bs.watch([cssDistDir+"*.css"], function (event, file) {
+    if (event === "change") {
+      reload("*.css");
+    }
+  });
+  bs.watch([scssSourceDir+"*.scss"], function (event, file) {
+    if (event === "change") {
+      reload("*.scss");
+    }
+  });
+  bs.watch([jsDistDir+"*.css"], function (event, file) {
+    if (event === "change") {
+      reload("*.js");
+    }
+  });
 });
 
 
@@ -216,6 +243,25 @@ gulp.task('minifyJS', function () {
         .pipe(gulp.dest(jsDistDir))
 })
 
+//生成雪碧图 -- 可选任务
+gulp.task('sprites', function () {
+  return sprity.src({
+      name: 'icons',                       //定义一个名称
+      src: iconSource + '*.{png,jpg}',
+      processor: 'css', // css生成处理
+      //processor:'sass',  //SCSS生成处理
+      style: cssDistDir+'sprites.scss',  //CSS输出路径
+      //style: '_icon.scss',                //这是生成的样式文件
+      format: 'png',                      //png格式的图片
+      orientation: 'vertical'         //雪碧图合并的方向，也可以设置成垂直或水平(vertical|horizontal|binary-tree)
+      //cssPath: '#{$icon-sprite-path}',    //雪碧图的路径变量
+      //template: './sprite-tpl.mustache',  //scss生成的模板
+
+    })
+    .pipe($.if('*.png', gulp.dest(imgDistDir), gulp.dest(cssDistDir)))
+    //.pipe($.if('*.png', gulp.dest(imgDistDir), gulp.dest(scssSourceDir)))
+});
+
 
 //eslint
 // gulp.task('eslint', function() {
@@ -249,7 +295,5 @@ gulp.task('default', ['serve'], function () {
     gulp.start('sass', 'minifyJS', 'minifyCSS', 'minifyHTML',
         'minifyImg')
     gulp.watch(scssSourceDir + "*.scss", ['sass']);
-    gulp.watch(['*.html', cssSourceDir + '*.css',scssSourceDir+'*.scss'], ['minifyCSS'])
-        .on('change', reload) //检测到html和css有变动重新加载浏览器页面
 
 })

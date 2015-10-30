@@ -6,8 +6,9 @@
 
 ##依赖环境
 - node v4.x
-- python 2.7.x
+- python 2.7.x / Python 3+
  - (browser-sync 在window下依赖Python 2.x)
+- visual studio 2013+ (一些插件需要依赖这个)/Linux和mac就不需要这个
 
 
 ##特征
