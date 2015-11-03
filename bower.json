@@ -28,7 +28,9 @@
     "clipboard.js": "~0.1.1",
     "jquery-pjax": "~1.9.6",
     "foundation": "~5.5.3",
-    "admin-lte":"~2.3.2",
-    "semantic": "semantic-ui#~2.1.4"
+    "admin-lte": "~2.3.2",
+    "semantic": "semantic-ui#~2.1.4",
+    "vue": "~1.0.4",
+    "react": "~0.14.2"
   }
 }

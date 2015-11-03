@@ -33,7 +33,7 @@
     │  bower.json -- bower配置文件
     │  CHANGELOG.md -- 项目文件修改的日志记录
     │  gulpfile.js -- gulp配置文件
-    │  index.html
+    │  index.html -- 启动页面
     │  LICENSE -- 项目协议
     │  package.json -- node配置文件(在该目录下,项目开始`npm install`)
     │  README.md

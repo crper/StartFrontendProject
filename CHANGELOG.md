@@ -28,4 +28,7 @@
 - 2015/10/30
   - 增加了雪碧图的合成
   - 改善了browser sync的监听任务,实时监听html,css,scss,js
+- 2015/11/03
+  - 升级bower里面的库为最新版,增加了vue.js及react.js框架
+  - nodejs使用最新版本v5.0.0,需要`npm rebuild node-sass`,不然gulp会不正常
   
