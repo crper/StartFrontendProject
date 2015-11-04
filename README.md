@@ -10,6 +10,11 @@
  - (browser-sync 在window下依赖Python 2.x)
 - visual studio 2013+ (一些插件需要依赖这个)/Linux和mac就不需要这个
 
+##用法
+**依赖环境必须先安装好,然后打开`terminal`,切换到该项目下**
+
+1. 执行`npm install` --- 安装node里面的依赖模块
+2. 执行`bower install` --- 安装bower里面的一些js库
 
 ##特征
 - 编译SASS/SCSS -> CSS
