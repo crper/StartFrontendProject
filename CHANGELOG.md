@@ -31,4 +31,6 @@
 - 2015/11/03
   - 升级bower里面的库为最新版,增加了vue.js及react.js框架
   - nodejs使用最新版本v5.0.0,需要`npm rebuild node-sass`,不然gulp会不正常
+- 2015/11/05
+  - 更新了模块和依赖 
   
