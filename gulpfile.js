@@ -7,32 +7,24 @@
 // gulp-sourcemaps   :Source map support for Gulp.js
 // gulp-babel        : Turn ES6 code into vanilla ES5 with no runtime required
 // gulp-concat       : Concatenate files
-// gulp-cache        : A cache proxy plugin for Gulp
 // gulp-eslint       : JavaScript code quality tool
 // gulp-load-plugins : Automatically load Gulp plugins
 // gulp-minify-css   : Minify CSS
 // gulp-minify-html  : Minify html with minimize.
-// gulp-filter       : Filter files in a vinyl stream
 // gulp-rename       : Rename files
 // gulp-sass         : Compile Sass
 // gulp-if           : Conditionally run a task
 // gulp-imagemin     : Minify PNG, JPEG, GIF and SVG images
 // gulp-uglify       : Minify JavaScript with UglifyJS
 // gulp-util         : Utility functions
-// gulp-ignore       : Include or exclude gulp files from the stream based on a condition
-// gulp-inject       : A javascript, stylesheet and webcomponent injection plugin for Gulp, i.e. inject file references into your index.html
 // gulp-notify       : gulp plugin to send messages based on Vinyl Files or Errors to Mac OS X, Linux or Windows using the node-notifier module. Fallbacks to Growl or simply logging
 // gulp-watch        : Watch stream
 // gulp-plumber      : Prevent pipe breaking caused by errors from gulp plugins
 // gulp-rimraf       : rimraf plugin for gulp
 // gulp-size         : Display the size of your project
 // gulp-ruby-sass    : Compile Sass to CSS with Ruby Sass
-// gulp-react        : Precompile Facebook React JSX templates into JavaScript
-// gulp-webpack      : webpack plugin for gulp
-// webpack-stream    : Run webpack as a stream to conveniently integrate with gulp.
 // gulp-csscomb      : CSScomb is a coding style formatter for CSS.
 // gulp-concat-css   : Concatenate css files, rebasing urls and inlining @import
-// yo                : CLI tool for running Yeoman generators
 // gulp-css-scss     : Gulp plugin for converting CSS to Scss.
 // sprity            : Generates sprites and proper style files out of a directory of images.
 // -------------------------------------
@@ -41,7 +33,7 @@
 var gulp = require('gulp'),
   gulpLoadPlugins = require('gulp-load-plugins'),
   bs = require('browser-sync')
-    .create(),
+  .create(),
   reload = bs.reload,
   $ = gulpLoadPlugins({ //plugins rename pin
     /*gulp-load-plugins options*/
@@ -245,20 +237,20 @@ gulp.task('minifyJS', function () {
 //生成雪碧图 -- 可选任务
 gulp.task('sprites', function () {
   return sprity.src({
-    name: 'icons',                       //定义一个名称
-    src: iconSource + '*.{png,jpg}',
-    processor: 'css', // css生成处理
-    //processor:'sass',  //SCSS生成处理
-    style: cssDistDir + 'sprites.scss',  //CSS输出路径
-    //style: '_icon.scss',                //这是生成的样式文件
-    format: 'png',                      //png格式的图片
-    orientation: 'vertical'         //雪碧图合并的方向，也可以设置成垂直或水平(vertical|horizontal|binary-tree)
-    //cssPath: '#{$icon-sprite-path}',    //雪碧图的路径变量
-    //template: './sprite-tpl.mustache',  //scss生成的模板
+      name: 'icons', //定义一个名称
+      src: iconSource + '*.{png,jpg}',
+      processor: 'css', // css生成处理
+      //processor:'sass',  //SCSS生成处理
+      style: cssDistDir + 'sprites.scss', //CSS输出路径
+      //style: '_icon.scss',                //这是生成的样式文件
+      format: 'png', //png格式的图片
+      orientation: 'vertical' //雪碧图合并的方向，也可以设置成垂直或水平(vertical|horizontal|binary-tree)
+        //cssPath: '#{$icon-sprite-path}',    //雪碧图的路径变量
+        //template: './sprite-tpl.mustache',  //scss生成的模板
 
-  })
+    })
     .pipe($.if('*.png', gulp.dest(imgDistDir), gulp.dest(cssDistDir)))
-  //.pipe($.if('*.png', gulp.dest(imgDistDir), gulp.dest(scssSourceDir)))
+    //.pipe($.if('*.png', gulp.dest(imgDistDir), gulp.dest(scssSourceDir)))
 });
 
 
