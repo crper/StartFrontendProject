@@ -1,36 +1,28 @@
 {
-  "name": "StartFrontendProject",
-  "version": "0.0.0",
-  "homepage": "https://github.com/crperlin/StartFrontendProject",
+  "name": "brbgn",
+  "description": "",
+  "main": "",
   "authors": [
-    "crperlin <crper@outlook.com>"
+    "[object Object]"
   ],
-  "description": "This project library",
-  "main": "index.html",
-  "moduleType": [],
   "license": "MIT",
-  "private": true,
+  "moduleType": [],
+  "homepage": "",
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
-    "./bower_components",
+    "./dist/lib",
     "test",
     "tests"
   ],
   "devDependencies": {
-    "jquery": "~2.1.4",
-    "bootstrap": "~3.3.5",
-    "html5-boilerplate": "~5.2.0",
-    "Chart.js": "chartjs#~1.0.2",
-    "font-awesome": "~4.4.0",
-    "fullpage.js": "fullpage#~2.7.4",
-    "clipboard.js": "~0.1.1",
-    "jquery-pjax": "~1.9.6",
-    "foundation": "~5.5.3",
-    "admin-lte": "~2.3.2",
-    "semantic": "semantic-ui#~2.1.4",
-    "vue": "~1.0.4",
-    "react": "~0.14.2"
+    "jquery": "~2.2.0",
+    "bootstrap": "~3.3.6",
+    "jquery-validation": "~1.14.0",
+    "font-awesome": "~4.5.0",
+    "requirejs": "~2.1.22",
+    "lodash": "~4.0.1",
+    "requirejs-babel": "~0.0.9"
   }
 }

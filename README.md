@@ -5,10 +5,10 @@
 可以在这个基础上自行拓展
 
 ##依赖环境
-- node v4.x
-- python 2.7.x / Python 3+
+- node v4.x+
+- python 2.7.x 
  - (browser-sync 在window下依赖Python 2.x)
-- visual studio 2013+ (一些插件需要依赖这个)/Linux和mac就不需要这个
+- visual studio 2013+ (编译一些插件需要依赖这个)/Linux和mac就不需要这个
 
 ##用法
 **依赖环境必须先安装好,然后打开`terminal`,切换到该项目下**
@@ -16,9 +16,9 @@
 1. 执行`npm install` --- 安装node里面的依赖模块
 2. 执行`bower install` --- 安装bower里面的一些js库
 
-##特征
-- 编译SASS/SCSS -> CSS
-- CSS 逆转换为 less / scss
+##任务列表
+- 编译SCSS -> CSS
+- AMD文件优化
 - 压缩JS/HTML/CSS/图片
 - 合并文件
 - JS语法检测
@@ -31,40 +31,25 @@
 ##目录结构及文件
 <pre>
 └─webstart
-    │  .bowerrc -- 更改bower默认安装路径的环境文件
-    │  .editorconfig -- 项目规范全局配置
-    │  .eslintrc -- JS语法检测配置
-    │  .gitignore -- github提交忽略
-    │  bower.json -- bower配置文件
-    │  CHANGELOG.md -- 项目文件修改的日志记录
-    │  gulpfile.js -- gulp配置文件
-    │  index.html -- 启动页面
-    │  LICENSE -- 项目协议
-    │  package.json -- node配置文件(在该目录下,项目开始`npm install`)
-    │  README.md
-    │  bower_components -- bower安装的库存放路径(这个路径可以在.bowerrc修改)
-    │  node_modules -- node安装的存放目录
-    ├─build -- 开发目录
-    │  ├─covertSource
-    │  │  ├─covert2es6  -- es6待转换存放目录
-    │  │  ├─covert2less -- less待转换存放目录
-    │  │  └─covert2scss -- scss待转换存放目录
+    ├─build          ---> 开发目录
     │  ├─css
-    │  │  └─all -- css合并文件存放目录(开发)
+    │  │  ├─all
+    │  │  └─common   -- 通用样式
     │  ├─img
+    │  │  └─sprite   --待合并成雪碧图的图片文件
     │  ├─js
-    │  │  └─all -- js合并文件存放目录(开发)
-    │  ├─less
-    │  └─scss
-    │          
-    │          
-    │          
-    └─dist -- 发布目录
-        ├─css
-        │  └─all
-        ├─fonts
-        ├─img
-        └─js
+    │  │  └─all      -- 待合并
+    │  ├─scss        -- 待编译的SCSS文件
+    │  └─es6         -- es6语法的JS文件
+    ├─dist           ---> 生成目录
+    │  ├─img
+    │  │  ├─img      -- 压缩过后的图片
+    │  │  └─sprite   --合并完成的雪碧图
+    │  ├─css
+    │  │  └─common
+    │  ├─js
+    │  └─lib  -- bower安装的第三方库默认存放路径
+    └─static  -- 静态HTML文件存放
 </pre>
 
 
