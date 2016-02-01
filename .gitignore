@@ -8,8 +8,8 @@ idea
 vscode
 
 #忽略编译的css
-webstart/build/**
-!webstart/build/scss/**/*.scss
+webstart/build/**/*.css
+webstart/build/scss/**/*.scss
 
 
 #忽略第三方库,bower安装的
