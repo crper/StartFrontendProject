@@ -45,4 +45,13 @@
   - 用bower来管理第三方库
 - 2016/2/22
   - 更新插件 
+
+- 2016/4/27
+  - 增加gulp-postcss和autoprefixer
+  - 更新所有模块
+  - 添加gulp-sequence(队列管理)
+  - 删除csso压缩模块
+  - 删除.eslint和.bowerrc的配置文件
+  - 删除gulp-notify模块
+  - 移除bower管理
   

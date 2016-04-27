@@ -14,12 +14,12 @@
 **依赖环境必须先安装好,然后打开`terminal`,切换到该项目下**
 
 1. 执行`npm install` --- 安装node里面的依赖模块
-2. 执行`bower install` --- 安装bower里面的一些js库
 
 **如果喜欢就fork或者star一下吧,有完善的也可以提交~~~**
 
 ##任务列表
 - 编译SCSS -> CSS
+- 添加浏览器前缀
 - AMD文件优化
 - 压缩JS/HTML/CSS/图片
 - 合并文件
@@ -52,7 +52,6 @@
     │  ├─css
     │  │  └─common
     │  ├─js
-    │  └─lib  -- bower安装的第三方库默认存放路径
     └─static  -- 静态HTML文件存放
 </pre>
 
