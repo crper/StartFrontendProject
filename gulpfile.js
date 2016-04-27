@@ -1,5 +1,5 @@
 /**
- * cnpm install gulp imagemin-svgo gulp-notify  gulp-babel babel-preset-es2015 gulp.spritesmith vinyl-buffer gulp-csso gulp-amd-optimizer  gulp-plumber gulp-notify  gulp-sourcemaps gulp-jshint  gulp-uglify gulp-sass gulp-cssnano gulp-autoprefixer  gulp-ifnpm gulp-size gulp-concat gulp-rimraf gulp-rename gulp-postcss gulp-scss-lint gulp-imagemin browser-sync --save-dev
+ * cnpm install gulp imagemin-svgo gulp-notify  gulp-babel babel-preset-es2015 gulp.spritesmith vinyl-buffer gulp-postcss autoprefixer gulp-amd-optimizer  gulp-plumber gulp-notify  gulp-sourcemaps gulp-jshint  gulp-uglify gulp-sass gulp-cssnano gulp-autoprefixer  gulp-ifnpm gulp-size gulp-concat gulp-rimraf gulp-rename gulp-postcss gulp-scss-lint gulp-imagemin browser-sync --save-dev
  */
 
 
@@ -8,6 +8,8 @@ var gulp = require('gulp'),                                                     
     sass         = require('gulp-sass'),                                             //sass编译
     concat       = require('gulp-concat'),                                           //合并JS
     uglify       = require('gulp-uglify'),                                           //压缩JS
+    gulpif       = require('gulp-if'),                                               //增加判断
+    sequence     = require('gulp-sequence'),                                         //队列
     cssnano      = require('gulp-cssnano'),                                          //压缩CSS
     imagemin     = require('gulp-imagemin'),                                         //压缩图片
     pngquant     = require('imagemin-pngquant'),                                     //深度压缩图片
@@ -19,11 +21,11 @@ var gulp = require('gulp'),                                                     
     sourcemaps   = require('gulp-sourcemaps'),                                       //sourcemaps
     spritesmith  = require('gulp.spritesmith'),                                      //雪碧图
     bf           = require('vinyl-buffer'),                                          //流缓存
-    csso         = require('gulp-csso'),                                             //css压缩
+    postcss      = require('gulp-postcss'),                                          //css处理
     merge        = require('merge-stream'),                                          //合并流
     babel        = require('gulp-babel'),                                            //es6转化为es5
+    autoprefixer = require('autoprefixer'),                                          //添加浏览器前缀
     jshint       = require('gulp-jshint'),                                           //js语法检测
-    notify       = require('gulp-notify'),                                           //消息提示
     bs           = require('browser-sync').create(),                                 //即时预览
     bs_reload    = bs.reload;                                                        //即时预览重载
 
@@ -48,7 +50,7 @@ var current = false,                                                            
         d_css       : "webstart/dist/css/",                                                 //输出的文件
         d_img       : 'webstart/dist/img/',
         d_js        : 'webstart/dist/js/',
-        server_root : ["webstart", "webstart/static"],
+        server_root : ["webstart/static"],
         o_dist      : o_dist,
         o_css       : o_css,                                                                //其他项目输出文件
         o_js        : o_js,
@@ -62,11 +64,23 @@ var current = false,                                                            
                 path.d_mod       = path.o_mod;
                 path.server_root = path.o_dist;                                      //本地服务器启动根目录
             }
-        }
+            }
     };
 path.selectPath(current);
 
 
+
+gulp.task('help',function(){ 
+        
+        console.log("scss_2_cs : SCSS文件编译为CSS文件到开发目录"); 
+        console.log("cssmin    : 压缩CSS文件到生产目录"); 
+        console.log("uglify    : 压缩JS文件到生产目录"); 
+        console.log("imagemin  : 压缩png文件到生产目录"); 
+        console.log("sprite    : 雪碧图生成到生成目录"); 
+        console.log("es6_2_es5 : es6转为ES5"); 
+        console.log("serve     : 本地静态服务器"); 
+        console.log("rimraf    : 删除生成目录所有文件"); 
+})
 
 
 /**
@@ -74,8 +88,10 @@ path.selectPath(current);
  */
 gulp.task('scss_2_css', function () {
     gulp.src(path.s_sass + '**/*.scss')
-    .pipe(plumber({errorHandler: notify.onError("错误信息: <%= error.message %>")}))
+    .pipe(plumber())
     .pipe(sass.sync().on('error', sass.logError))
+    .pipe(plumber.stop())
+    .pipe(postcss([ autoprefixer({ browsers: ['last 3 versions'] }) ]))
     .pipe(gulp.dest(path.s_css));
 });
 
@@ -83,8 +99,8 @@ gulp.task('scss_2_css', function () {
 gulp.task('lint', function () {
     gulp.src(path.d_js + '**/*.js')
     .pipe(jshint())
-    .pipe(jshint.reporter('default'))
-    .pipe(notify("任务成功执行!发现文件: <%= file.relative %>!"));
+    .pipe(jshint.reporter('default'));
+    
 });
 
 
@@ -93,13 +109,8 @@ gulp.task('lint', function () {
  */
 gulp.task('cssmin', function () { //执行完sass再执行cssmin
     return gulp.src(path.s_css + '**/*.css')
-    .pipe(plumber({errorHandler: notify.onError("错误信息: <%= error.message %>")}))
+    .pipe(plumber())
     .pipe(sourcemaps.init()) //sourcemapr入口
-
-    .pipe(autoprefixer({ //浏览器前缀
-        browsers: ['last 2 versions'],
-        cascade: false
-    }))
     .pipe(rename({
         // dirname: "main/text/ciao",   //目录名
         // basename: "aloha",           //基本命名
@@ -109,8 +120,8 @@ gulp.task('cssmin', function () { //执行完sass再执行cssmin
     }))
     .pipe(cssnano())
     .pipe(sourcemaps.write('.')) //保存到输出map
-    .pipe(gulp.dest(path.d_css))
-    .pipe(notify("任务成功执行!发现文件: <%= file.relative %>!"));
+    .pipe(gulp.dest(path.d_css));
+    
 });
 
 
@@ -119,7 +130,7 @@ gulp.task('cssmin', function () { //执行完sass再执行cssmin
  */
 gulp.task('uglify', function () {
     return gulp.src(path.s_js + '**/*.js') //'!src/static/js/main/*js' 不压缩
-    .pipe(plumber({errorHandler: notify.onError("错误信息: <%= error.message %>")}))
+    .pipe(plumber())
     .pipe(rename({
         // dirname: "main/text/ciao",   //目录名
         // basename: "aloha",           //基本命名
@@ -131,9 +142,11 @@ gulp.task('uglify', function () {
         mangle: true, //类型：Boolean 默认：true 是否修改变量名
         compress: true //类型：Boolean 默认：true 是否完全压缩
     }))
-    .pipe(gulp.dest(path.d_js))
-    .pipe(notify("任务成功执行!发现文件: <%= file.relative %>!"));
+    .pipe(gulp.dest(path.d_js));
+    
 });
+
+
 
 
 /**
@@ -141,7 +154,7 @@ gulp.task('uglify', function () {
  */
 gulp.task('imagemin', function () {
     return gulp.src(path.s_img + '*')
-    .pipe(plumber({errorHandler: notify.onError("错误信息: <%= error.message %>")}))
+    .pipe(plumber())
     .pipe(imagemin({
         progressive: true,
         svgoPlugins: [{
@@ -149,8 +162,8 @@ gulp.task('imagemin', function () {
         }],
         use: [pngquant()]
     }))
-    .pipe(gulp.dest(path.d_img))
-    .pipe(notify("任务成功执行!发现文件: <%= file.relative %>!"));
+    .pipe(gulp.dest(path.d_img));
+    
 });
 
 //雪碧图
@@ -170,7 +183,6 @@ gulp.task('sprite', function () {
 
     // Pipe CSS stream through CSS optimizer and onto disk
     var cssStream = spriteData.css
-    //.pipe(csso())       //压缩CSS
     .pipe(gulp.dest(path.d_css));
 
     // Return a merged stream to handle both `end` events
@@ -184,11 +196,11 @@ gulp.task('rimraf', function () {
     return gulp.src([path.d_css + '**/*',path.d_js + '**/*'], {
         read: false
     }) // much faster
-    .pipe(plumber({errorHandler: notify.onError("错误信息: <%= error.message %>")}))
+    .pipe(plumber())
     .pipe(rimraf({
         force: true
-    }))
-    .pipe(notify("任务成功执行!发现文件: <%= file.relative %>!"));
+    }));
+    
 });
 
 /**
@@ -196,28 +208,18 @@ gulp.task('rimraf', function () {
  */
 gulp.task('amdop', function () {
     return gulp.src(path.d_js + '**/*.js', {base: amdConfig.baseUrl})
-    .pipe(plumber({errorHandler: notify.onError("错误信息: <%= error.message %>")}))
+    .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(amdOptimize(amdConfig))
     .pipe(concat('modules.js'))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(path.d_js))
-    .pipe(notify("任务成功执行!发现文件: <%= file.relative %>!"));
+    .pipe(gulp.dest(path.d_js));
+    
 });
 var amdConfig = {
-    baseUrl: '/oneyuan/dist/lib/',
+    baseUrl: '',
     path: {
-        jQuery         : "jquery/dist/jquery.min",
-        bootstrap      : "bootstrap/dist/js/bootstrap.min",
-        validation     : "jquery-validation/dist/jquery.validate.min",
-        es6            : 'requirejs-babel/es6',
-        babel          : 'requirejs-babel/babel-5.8.34.min',
-        echarts        : 'ech arts/dist/echarts.min',
-        pagin          : 'pagin',
-        slider         : 'superslider/js/jquery.SuperSlide.2.1.1',
-        countdown      : '../js/countdown',
-        indexCountdown : '../js/indexCountdown',
-        lodash         : 'lodash/lodash.core'
+            //object
     },
     exclude: [
         'jQuery'
@@ -239,12 +241,17 @@ gulp.task('serve', function () {
     gulp.watch([path.server_root + '**/*.html', path.d_css + '**/*.css', path.s_img + '*', path.d_js + '**/*.js']).on("change", bs_reload);
 });
 
+/*队列管理*/
+gulp.task('default-sequence',function(cb){
+    sequence(['scss_2_css', 'cssmin'], ['es6_2_es5','uglify'], ['sprite','imagemin'], 'serve', cb);
+})
+
 
 /**
  * 默认任务 运行语句 gulp
  */
-gulp.task('default', ['watch','rimraf'], function () {
-    return gulp.start('scss_2_css', 'cssmin', 'uglify', 'imagemin', 'serve','sprite');
+gulp.task('default',  function () {
+    return gulp.start('default-sequence');
 });
 
 /**
@@ -252,15 +259,15 @@ gulp.task('default', ['watch','rimraf'], function () {
  */
 gulp.task('es6_2_es5', function() {
     return gulp.src(path.s_es+'**/*.js')
-    .pipe(plumber({errorHandler: notify.onError("错误信息: <%= error.message %>")}))
+    .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(babel({
         presets: ['es2015']
     }))
     //.pipe(concat('all.js'))
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(path.d_js))
-    .pipe(notify("任务成功执行!发现文件: <%= file.relative %>!"));
+    .pipe(gulp.dest(path.d_js));
+    
 });
 
 /**
