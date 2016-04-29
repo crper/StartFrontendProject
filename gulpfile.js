@@ -50,7 +50,7 @@ var current = false,                                                            
         d_css       : "webstart/dist/css/",                                                 //输出的文件
         d_img       : 'webstart/dist/img/',
         d_js        : 'webstart/dist/js/',
-        server_root : ["webstart/static"],
+        server_root : ["webstart/static","webstart/static/SS/"],                           //静态服务器根目录,可以传入多个目录
         o_dist      : o_dist,
         o_css       : o_css,                                                                //其他项目输出文件
         o_js        : o_js,
@@ -64,7 +64,7 @@ var current = false,                                                            
                 path.d_mod       = path.o_mod;
                 path.server_root = path.o_dist;                                      //本地服务器启动根目录
             }
-            }
+        }
     };
 path.selectPath(current);
 
@@ -234,11 +234,14 @@ gulp.task('serve', function () {
     // 从这个项目的根目录启动服务器
     bs.init({
         server: {
-            baseDir: [path.server_root+""] //本地服务器目录
+            baseDir: path.server_root //本地服务器目录
         },
-        port:8085
+        port:1234
     });
-    gulp.watch([path.server_root + '**/*.html', path.d_css + '**/*.css', path.s_img + '*', path.d_js + '**/*.js']).on("change", bs_reload);
+    gulp.watch([path.server_root + '**/**/*.html', 
+                path.d_css + '**/**/*.css', 
+                path.s_img + '*', 
+                path.d_js + '**/**/*.js']).on("change", bs_reload);
 });
 
 /*队列管理*/
