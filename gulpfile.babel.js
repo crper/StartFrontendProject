@@ -4,30 +4,34 @@
 
 
 'use strict';
-var gulp = require('gulp'),                                                          //gulp
-    sass         = require('gulp-sass'),                                             //sass编译
-    concat       = require('gulp-concat'),                                           //合并JS
-    uglify       = require('gulp-uglify'),                                           //压缩JS
-    gulpif       = require('gulp-if'),                                               //增加判断
-    sequence     = require('gulp-sequence'),                                         //队列
-    cssnano      = require('gulp-cssnano'),                                          //压缩CSS
-    imagemin     = require('gulp-imagemin'),                                         //压缩图片
-    pngquant     = require('imagemin-pngquant'),                                     //深度压缩图片
-    autoprefixer = require('gulp-autoprefixer'),                                     //自动补齐前缀
-    rimraf       = require('gulp-rimraf'),                                           //清除文件
-    rename       = require('gulp-rename'),                                           //重命名
-    plumber      = require('gulp-plumber'),                                          //错误提示
-    amdOptimize  = require('gulp-amd-optimizer'),                                    //requirejs 压缩
-    sourcemaps   = require('gulp-sourcemaps'),                                       //sourcemaps
-    spritesmith  = require('gulp.spritesmith'),                                      //雪碧图
-    bf           = require('vinyl-buffer'),                                          //流缓存
-    postcss      = require('gulp-postcss'),                                          //css处理
-    merge        = require('merge-stream'),                                          //合并流
-    babel        = require('gulp-babel'),                                            //es6转化为es5
-    autoprefixer = require('autoprefixer'),                                          //添加浏览器前缀
-    jshint       = require('gulp-jshint'),                                           //js语法检测
-    bs           = require('browser-sync').create(),                                 //即时预览
-    bs_reload    = bs.reload;                                                        //即时预览重载
+
+import gulp         from "gulp";                                    //gulp
+import sass         from "gulp-sass";                               //sass编译
+import concat       from "gulp-concat";                             //合并JS
+import uglify       from "gulp-uglify";                             //压缩JS
+import gulpif       from "gulp-if";                                 //增加判断
+import sequence     from "gulp-sequence";                           //队列
+import cssnano      from "gulp-cssnano";                            //压缩CSS
+import imagemin     from "gulp-imagemin";                           //压缩图片
+import pngquant     from "imagemin-pngquant";                       //深度压缩图片
+import rimraf       from "gulp-rimraf";                             //清除文件
+import rename       from "gulp-rename";                             //重命名
+import plumber      from "gulp-plumber";                            //错误提示
+import amdOptimize  from "gulp-amd-optimizer";                      //requirejs 压缩
+import sourcemaps   from "gulp-sourcemaps";                         //sourcemaps
+import spritesmith  from "gulp.spritesmith";                        //雪碧图
+import bf           from "vinyl-buffer";                            //流缓存
+import postcss      from "gulp-postcss";                            //css处理
+import merge        from "merge-stream";                            //合并流
+import babel        from "gulp-babel";                              //es6转化为es5
+import autoprefixer from "autoprefixer";                            //添加浏览器前缀
+import jshint       from "gulp-jshint";                             //js语法检测
+import bsc          from "browser-sync";
+
+const bs = bsc.create(),    //即时预览
+      bs_reload = bs.reload; //即时预览重载
+
+                                                  
 
 
 /**
@@ -40,29 +44,29 @@ var current = false,                                                            
     o_img = o_dist + 'dist/img/',                                                    //其他项目下的IMG
     o_mod = o_dist + 'dist/mod/',                                                    //其他目录下的模块
     path = {     
-        s_sass      : "webstart/build/scss/",                                              //待编译的源文件路径
+        s_sass      : "webstart/build/scss/",                                        //待编译的源文件路径
         s_css       : "webstart/build/css/",
         s_js        : "webstart/build/js/",
-        s_es        : "webstart/build/es6/",                                                 //待转换的ES6文件
-        s_img       : "webstart/build/img/",                                                //待压缩的图片
-        s_simg      : "webstart/build/img/sprite/",                                        //待合并成雪碧图的文件
+        s_es        : "webstart/build/es6/",                                         //待转换的ES6文件
+        s_img       : "webstart/build/img/",                                         //待压缩的图片
+        s_simg      : "webstart/build/img/sprite/",                                  //待合并成雪碧图的文件
         dist        : "webstart/dist/",
-        d_css       : "webstart/dist/css/",                                                 //输出的文件
+        d_css       : "webstart/dist/css/",                                          //输出的文件
         d_img       : 'webstart/dist/img/',
         d_js        : 'webstart/dist/js/',
-        server_root : ["webstart/static","webstart/static/SS/"],                           //静态服务器根目录,可以传入多个目录
+        server_root : ["webstart/static","webstart/static/SS/"],                     //静态服务器根目录,可以传入多个目录
         o_dist      : o_dist,
-        o_css       : o_css,                                                                //其他项目输出文件
+        o_css       : o_css,                                                         //其他项目输出文件
         o_js        : o_js,
         o_img       : o_img,
         o_mod       : o_mod,
-        selectPath  : function (current) {                                             //开始替换路径
+        selectPath  : (current) =>  {                                                //开始替换路径
             if (current) {   
                 path.d_css       = path.o_css;
                 path.d_img       = path.o_img;
                 path.d_js        = path.o_js;
                 path.d_mod       = path.o_mod;
-                path.server_root = path.o_dist;                                      //本地服务器启动根目录
+                path.server_root = path.o_dist;                                       //本地服务器启动根目录
             }
         }
     };
@@ -70,7 +74,7 @@ path.selectPath(current);
 
 
 
-gulp.task('help',function(){ 
+gulp.task('help',() => { 
         
         console.log("scss_2_cs : SCSS文件编译为CSS文件到开发目录"); 
         console.log("cssmin    : 压缩CSS文件到生产目录"); 
@@ -86,7 +90,7 @@ gulp.task('help',function(){
 /**
  * sass 语法检测及文件处理
  */
-gulp.task('scss_2_css', function () {
+gulp.task('scss_2_css', () => {
     gulp.src(path.s_sass + '**/*.scss')
     .pipe(plumber())
     .pipe(sass.sync().on('error', sass.logError))
@@ -96,7 +100,7 @@ gulp.task('scss_2_css', function () {
 });
 
 //脚本检查
-gulp.task('lint', function () {
+gulp.task('lint', () => {
     gulp.src(path.d_js + '**/*.js')
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
@@ -107,7 +111,7 @@ gulp.task('lint', function () {
 /**
  * 压缩css
  */
-gulp.task('cssmin', function () { //执行完sass再执行cssmin
+gulp.task('cssmin', () => { //执行完sass再执行cssmin
     return gulp.src(path.s_css + '**/*.css')
     .pipe(plumber())
     .pipe(sourcemaps.init()) //sourcemapr入口
@@ -128,7 +132,7 @@ gulp.task('cssmin', function () { //执行完sass再执行cssmin
 /**
  * 压缩js
  */
-gulp.task('uglify', function () {
+gulp.task('uglify', () => {
     return gulp.src(path.s_js + '**/*.js') //'!src/static/js/main/*js' 不压缩
     .pipe(plumber())
     .pipe(rename({
@@ -152,7 +156,7 @@ gulp.task('uglify', function () {
 /**
  * 图片压缩
  */
-gulp.task('imagemin', function () {
+gulp.task('imagemin', () => {
     return gulp.src(path.s_img + '*')
     .pipe(plumber())
     .pipe(imagemin({
@@ -167,7 +171,7 @@ gulp.task('imagemin', function () {
 });
 
 //雪碧图
-gulp.task('sprite', function () {
+gulp.task('sprite', () => {
     // Generate our spritesheet
     var spriteData = gulp.src(path.s_simg+'*.png').pipe(spritesmith({
         imgName: 'sprite.png',
@@ -192,7 +196,7 @@ gulp.task('sprite', function () {
 /**
  * 清空图片、样式、js
  */
-gulp.task('rimraf', function () {
+gulp.task('rimraf', () => {
     return gulp.src([path.d_css + '**/*',path.d_js + '**/*'], {
         read: false
     }) // much faster
@@ -206,7 +210,7 @@ gulp.task('rimraf', function () {
 /**
  *AMD 模块压缩
  */
-gulp.task('amdop', function () {
+gulp.task('amdop', () => {
     return gulp.src(path.d_js + '**/*.js', {base: amdConfig.baseUrl})
     .pipe(plumber())
     .pipe(sourcemaps.init())
@@ -230,7 +234,7 @@ var amdConfig = {
 /**
  *本地服务器
  */
-gulp.task('serve', function () {
+gulp.task('serve', () => {
     // 从这个项目的根目录启动服务器
     bs.init({
         server: {
@@ -245,7 +249,7 @@ gulp.task('serve', function () {
 });
 
 /*队列管理*/
-gulp.task('default-sequence',function(cb){
+gulp.task('default-sequence',(cb) => {
     sequence(['scss_2_css', 'cssmin'], ['es6_2_es5','uglify'], ['sprite','imagemin'], 'serve', cb);
 })
 
@@ -253,14 +257,14 @@ gulp.task('default-sequence',function(cb){
 /**
  * 默认任务 运行语句 gulp
  */
-gulp.task('default',  function () {
+gulp.task('default',  () => {
     return gulp.start('default-sequence');
 });
 
 /**
  *  ES6 转化为ES5
  */
-gulp.task('es6_2_es5', function() {
+gulp.task('es6_2_es5', () => {
     return gulp.src(path.s_es+'**/*.js')
     .pipe(plumber())
     .pipe(sourcemaps.init())
@@ -276,7 +280,7 @@ gulp.task('es6_2_es5', function() {
 /**
  * 监听任务 运行语句 gulp watch
  */
-gulp.task('watch', function () {
+gulp.task('watch', () => {
 
     // 监听sass
     gulp.watch(path.s_sass + '**/*.scss', ['scss_2_css']);

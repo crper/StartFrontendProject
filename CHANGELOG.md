@@ -54,4 +54,8 @@
   - 删除.eslint和.bowerrc的配置文件
   - 删除gulp-notify模块
   - 移除bower管理
-  
+
+- 2016/5/1
+  - 移除gulp-autoprefixer,采用autoprefixer
+  - gulpfile改用es6写法，用babel编译；  
+
