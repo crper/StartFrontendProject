@@ -26,6 +26,7 @@ import merge        from "merge-stream";                            //合并流
 import babel        from "gulp-babel";                              //es6转化为es5
 import autoprefixer from "autoprefixer";                            //添加浏览器前缀
 import jshint       from "gulp-jshint";                             //js语法检测
+import filter       from "gulp-filter";                             //过滤器
 import bsc          from "browser-sync";
 
 const bs = bsc.create(),    //即时预览
@@ -38,22 +39,26 @@ const bs = bsc.create(),    //即时预览
  * 路径变量( s => source , d => distribute , o => other project)
  */  
 var current = false,                                                                 //变化路径的开关,true开启,false关闭
-    o_dist = 'F://LQH/WORK/Anzipay-mall/oneyuan/',                                   //其他项目的根目录
-    o_css = o_dist + 'dist/css/',                                                    //其他项目下的CSS
-    o_js = o_dist + 'dist/js/',                                                      //其他项目下的JS
-    o_img = o_dist + 'dist/img/',                                                    //其他项目下的IMG
-    o_mod = o_dist + 'dist/mod/',                                                    //其他目录下的模块
-    path = {     
-        s_sass      : "webstart/build/scss/",                                        //待编译的源文件路径
-        s_css       : "webstart/build/css/",
-        s_js        : "webstart/build/js/",
-        s_es        : "webstart/build/es6/",                                         //待转换的ES6文件
-        s_img       : "webstart/build/img/",                                         //待压缩的图片
-        s_simg      : "webstart/build/img/sprite/",                                  //待合并成雪碧图的文件
-        dist        : "webstart/dist/",
-        d_css       : "webstart/dist/css/",                                          //输出的文件
-        d_img       : 'webstart/dist/img/',
-        d_js        : 'webstart/dist/js/',
+o_dist      = 'F://LQH/WORK/Anzipay-mall/oneyuan/dist/',                             //其他项目的根目录
+o_css       = o_dist + 'css/',                                                       //其他项目下的CSS
+o_js        = o_dist + 'js/',                                                        //其他项目下的JS
+o_img       = o_dist + 'img/',                                                       //其他项目下的IMG
+o_mod       = o_dist + 'mod/',                                                       //其他目录下的模块
+build       = "webstart/build/",                                                     //开发目录
+dist        = "webstart/dist/",                                                      //输出目录           
+path        = {
+
+        s_sass      : build +"scss/",                                                //待编译的源文件路径
+        s_css       : build +"css/",
+        s_js        : build +"js/",
+        s_es        : build +"es6/",                                                 //待转换的ES6文件
+        s_img       : build +"img/",                                                 //待压缩的图片
+        s_simg      : build +"img/sprite/",                                          //待合并成雪碧图的文件
+        s_c_js      : build + "concat/js/",                                          //待合并的JS
+        s_c_css     : build + "concat/css/",                                         //待合并的CSS
+        d_css       : dist+"css/",                                                   //输出的文件
+        d_img       : dist+'img/',
+        d_js        : dist+'js/',
         server_root : ["webstart/static","webstart/static/SS/"],                     //静态服务器根目录,可以传入多个目录
         o_dist      : o_dist,
         o_css       : o_css,                                                         //其他项目输出文件
@@ -84,14 +89,31 @@ gulp.task('help',() => {
         console.log("es6_2_es5 : es6转为ES5"); 
         console.log("serve     : 本地静态服务器"); 
         console.log("rimraf    : 删除生成目录所有文件"); 
-})
+});
+
+/*合并文件*/
+gulp.task('concat_js',() => {
+    return gulp.src(path.s_c_js +'**/**/*.js')
+    .pipe(concat('concat_js.js',{
+        newLine:';'
+    }))
+    .pipe(gulp.dest(path.s_js));
+});
+
+gulp.task('concat_css',() => {
+    return gulp.src(path.s_c_css +'**/**/*.css')
+    .pipe(concat('concat_css.css'))
+    .pipe(gulp.dest(path.s_css));
+});
+
+
 
 
 /**
  * sass 语法检测及文件处理
  */
 gulp.task('scss_2_css', () => {
-    gulp.src(path.s_sass + '**/*.scss')
+    return gulp.src(path.s_sass + '**/*.scss')
     .pipe(plumber())
     .pipe(sass.sync().on('error', sass.logError))
     .pipe(plumber.stop())
@@ -101,7 +123,7 @@ gulp.task('scss_2_css', () => {
 
 //脚本检查
 gulp.task('lint', () => {
-    gulp.src(path.d_js + '**/*.js')
+    return gulp.src([path.d_js + '**/**/*.js',path.s_js + '**/**/*.js' , path.c_js + '**/**/*.js' ])
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
     
@@ -112,7 +134,7 @@ gulp.task('lint', () => {
  * 压缩css
  */
 gulp.task('cssmin', () => { //执行完sass再执行cssmin
-    return gulp.src(path.s_css + '**/*.css')
+    return gulp.src(path.s_css + '**/**/*.css')
     .pipe(plumber())
     .pipe(sourcemaps.init()) //sourcemapr入口
     .pipe(rename({
@@ -133,7 +155,7 @@ gulp.task('cssmin', () => { //执行完sass再执行cssmin
  * 压缩js
  */
 gulp.task('uglify', () => {
-    return gulp.src(path.s_js + '**/*.js') //'!src/static/js/main/*js' 不压缩
+    return gulp.src(path.s_js + '**/**/*.js') //'!src/static/js/main/*js' 不压缩
     .pipe(plumber())
     .pipe(rename({
         // dirname: "main/text/ciao",   //目录名
@@ -197,7 +219,7 @@ gulp.task('sprite', () => {
  * 清空图片、样式、js
  */
 gulp.task('rimraf', () => {
-    return gulp.src([path.d_css + '**/*',path.d_js + '**/*'], {
+    return gulp.src([path.d_css + '**/**/*',path.d_js + '**/*'], {
         read: false
     }) // much faster
     .pipe(plumber())
@@ -211,7 +233,7 @@ gulp.task('rimraf', () => {
  *AMD 模块压缩
  */
 gulp.task('amdop', () => {
-    return gulp.src(path.d_js + '**/*.js', {base: amdConfig.baseUrl})
+    return gulp.src(path.d_js + '**/**/*.js', {base: amdConfig.baseUrl})
     .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(amdOptimize(amdConfig))
@@ -248,10 +270,14 @@ gulp.task('serve', () => {
                 path.d_js + '**/**/*.js']).on("change", bs_reload);
 });
 
+
+
 /*队列管理*/
 gulp.task('default-sequence',(cb) => {
-    sequence(['scss_2_css', 'cssmin'], ['es6_2_es5','uglify'], ['sprite','imagemin'], 'serve', cb);
-})
+    sequence(['concat_css','concat_js'],['scss_2_css', 'cssmin'], ['es6_2_es5','uglify'], ['sprite','imagemin'], 'serve', cb);
+});
+
+
 
 
 /**
@@ -265,15 +291,12 @@ gulp.task('default',  () => {
  *  ES6 转化为ES5
  */
 gulp.task('es6_2_es5', () => {
-    return gulp.src(path.s_es+'**/*.js')
+    return gulp.src(path.s_es+'**/**/*.js')
     .pipe(plumber())
-    .pipe(sourcemaps.init())
     .pipe(babel({
         presets: ['es2015']
     }))
-    //.pipe(concat('all.js'))
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(path.d_js));
+    .pipe(gulp.dest(path.s_js));
     
 });
 
@@ -286,13 +309,13 @@ gulp.task('watch', () => {
     gulp.watch(path.s_sass + '**/*.scss', ['scss_2_css']);
 
     // 监听css
-    gulp.watch(path.s_css + '**/*.css', ['cssmin']);
+    gulp.watch(path.s_css + '**/**/*.css', ['cssmin']);
 
     // 监听images
     gulp.watch(path.s_img + '*', ['imagemin']);
 
     //监听ES6 JS
-    gulp.watch(path.s_es+'**/*.js',['es6_2_es5']);
+    gulp.watch(path.s_es+'**/**/*.js',['es6_2_es5']);
 
     // 监听js
     gulp.watch(path.d_js + '**/*.js', ['uglify']);

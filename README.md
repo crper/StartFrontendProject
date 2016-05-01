@@ -37,13 +37,11 @@
 └─webstart
     ├─build          ---> 开发目录
     │  ├─css
-    │  │  ├─all
-    │  │  └─common   -- 通用样式
     │  ├─img
     │  │  └─sprite   --待合并成雪碧图的图片文件
     │  ├─js
-    │  │  └─all      -- 待合并
     │  ├─scss        -- 待编译的SCSS文件
+    │  ├─concat      -- 待合并的文件
     │  └─es6         -- es6语法的JS文件
     ├─dist           ---> 生成目录
     │  ├─img

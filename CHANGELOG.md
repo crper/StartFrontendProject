@@ -57,5 +57,7 @@
 
 - 2016/5/1
   - 移除gulp-autoprefixer,采用autoprefixer
-  - gulpfile改用es6写法，用babel编译；  
+  - gulpfile改用es6写法，用babel编译； 
+  - 写法上的优化 
+  - 增加gulp-filter
 
