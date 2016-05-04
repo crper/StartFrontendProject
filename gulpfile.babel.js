@@ -274,7 +274,7 @@ gulp.task('serve', () => {
 
 /*队列管理*/
 gulp.task('default-sequence',(cb) => {
-    sequence(['concat_css','concat_js'],['scss_2_css', 'cssmin'], ['es6_2_es5','uglify'], ['sprite','imagemin'], 'serve', cb);
+    sequence(['concat_css','concat_js'],['scss_2_css', 'cssmin'], ['es6_2_es5','uglify'], ['sprite','imagemin'], 'serve','watch', cb);
 });
 
 
